@@ -28,6 +28,7 @@ public class Drivetrain extends SubsystemBase{
 	private RelativeEncoder rightFrontEncoder;
 	private RelativeEncoder rightRearEncoder;
 
+    //TODO: clean the code
     private Pigeon2 pigeon = new Pigeon2(0);
     private DifferentialDriveOdometry odometry;
 
