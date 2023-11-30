@@ -2,9 +2,11 @@ package frc.robot.commands;
 
 import java.net.ProxySelector;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
 
@@ -18,6 +20,9 @@ public class AutoDriveDistance extends CommandBase{
         this.posX = posX;
         Constraints constraint = new Constraints(10, 10);
         controller = new ProfiledPIDController(0,0,0, constraint);
+        controller.setTolerance(.2, 2);
+        SmartDashboard.putData("Driving distance PID", controller);
+
         addRequirements(drivetrain);
     }
 
@@ -29,18 +34,21 @@ public class AutoDriveDistance extends CommandBase{
     @Override
     public void execute() {
         // TODO Auto-generated method stub
-        super.execute();
+        double rawOutput = this.controller.calculate(this.drivetrain.getPose2d().getX(), new State(posX ,0));
+        rawOutput = MathUtil.clamp(rawOutput, -1, 1);
+        this.drivetrain.setCurvatureDrive(rawOutput, 0, true);
     }
 
     @Override
     public boolean isFinished() {
         // TODO Auto-generated method stub
-        return super.isFinished();
+        if (controller.atGoal()) return true;
+        return false;
     }
 
     @Override
     public void end(boolean interrupted) {
         // TODO Auto-generated method stub
-        super.end(interrupted);
+        this.drivetrain.setCurvatureDrive(0, 0, true);
     }
 }
