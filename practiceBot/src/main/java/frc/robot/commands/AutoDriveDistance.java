@@ -21,7 +21,7 @@ public class AutoDriveDistance extends CommandBase{
         Constraints constraint = new Constraints(10, 10);
         controller = new ProfiledPIDController(0,0,0, constraint);
         controller.setTolerance(.2, 2);
-        SmartDashboard.putData("Driving distance PID", controller);
+        //SmartDashboard.putData("Driving distance PID", controller);
 
         addRequirements(drivetrain);
     }
